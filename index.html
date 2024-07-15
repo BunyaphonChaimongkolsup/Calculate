@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculator</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: rgb(188, 248, 248);
+            margin: 0px;
+            padding: 0px;
+        }
+        .calculator {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            grid-gap: 5px;
+
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        #display {
+            grid-column: span 4;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            font-size: 1rem;
+            border: 1px solid rgb(209, 209, 209);
+        }
+
+        #acButton {
+            grid-column: span 3;
+        }
+
+        #zeroButton {
+            grid-column: span 2;
+        }
+
+        .calculator input[type="button"] {
+            padding: 10px;
+            font-size: 1rem;
+            background-color: rgb(60, 206, 2);
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            transition: background-color 0.1s ease-in;
+        }
+
+        .calculator input[type="button"]:hover {
+            background-color:rgb(0, 172, 0);
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <input type="text" id="display" disabled>
+
+        <input type="button" value="AC" id="acButton" onclick="clearDisplay()">
+        <input type="button" value="/" onclick="setOperator(event)">
+
+        <input type="button" value="7" onclick="setCurrentValue(event)">
+        <input type="button" value="8" onclick="setCurrentValue(event)">
+        <input type="button" value="9" onclick="setCurrentValue(event)">
+        <input type="button" value="*" onclick="setOperator(event)">
+
+        <input type="button" value="4" onclick="setCurrentValue(event)">
+        <input type="button" value="5" onclick="setCurrentValue(event)">
+        <input type="button" value="6" onclick="setCurrentValue(event)">
+        <input type="button" value="-" onclick="setOperator(event)">
+
+        <input type="button" value="1" onclick="setCurrentValue(event)">
+        <input type="button" value="2" onclick="setCurrentValue(event)">
+        <input type="button" value="3" onclick="setCurrentValue(event)">
+        <input type="button" value="+" onclick="setOperator(event)">
+
+        <input type="button" id="zeroButton" value="0"  onclick="setCurrentValue(event)">
+        <input type="button" value=".">
+        <input type="button" value="=" onclick="calculator()" onclick="setOperator(event)">
+    </div>
+    <script>
+        let prevValue = 0;
+        let currentValue = 0;
+        let operation = "";
+
+        function clearDisplay() {
+            const DisplayDOM = document.getElementById('display');
+            DisplayDOM.value = "";
+        }
+
+        function calculator() {
+            const DisplayDOM = document.getElementById('display');
+            console.log("prevValue =>",prevValue);
+            console.log("currentValue =>",currentValue);
+            console.log("operation =>",operation);
+            DisplayDOM.value = Calculate(Number(prevValue), Number(currentValue), operation);
+        }
+
+        function setCurrentValue(e) {
+            const DisplayDOM = document.getElementById('display');
+            DisplayDOM.value = DisplayDOM.value + e.target.value;
+            if (DisplayDOM.value.includes("+") ||
+            DisplayDOM.value.includes("-") ||
+            DisplayDOM.value.includes("*") ||
+            DisplayDOM.value.includes("/")) {
+                DisplayDOM.value = e.target.value;
+                prevValue = currentValue;
+            }
+            currentValue = DisplayDOM.value;
+            console.log('e.target.value',e.target.value);
+        }
+
+        function setOperator(e) {
+            const DisplayDOM = document.getElementById('display');
+            DisplayDOM.value = e.target.value;
+            operation = e.target.value;
+        }
+
+        function Calculate(a, b, operator) {
+            let result = 0;
+            switch (operator) {
+                case "+":
+                    result = a + b;
+                    break;
+                case "-":
+                    result = a - b;
+                    break;
+                case "*":
+                    result = a * b;
+                    break;
+                case "/":
+                    if (b != 0) {
+                        result = a / b;
+                    }
+                    else {
+                        throw 'Division by Zero';
+                    }
+                    break;
+                default:
+                    throw 'Invalid Operator';
+            }
+
+            return result;
+        }
+    </script>
+</body>
+</html>
